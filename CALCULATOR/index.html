@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Calculator </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2 class="title"> SMART CALCULATOR </h2>
+    <div class="history"></div>
+    <div class="calculator">
+        <form>
+            <div class="display">
+                <input type="text" name="display" readonly>
+            </div>
+            <div>
+                <input type="button" value="AC" onclick="display.value= ''" class="operator">
+                <input type="button" value="DE" onclick="display.value = display.value.toString().slice(0,-1)">
+                <input type="button" value="." onclick="display.value += '.'" class="operator">
+                <input type="button" value="/" onclick="display.value += '/'" class="operator">
+
+            </div>
+             <div>
+                <input type="button" value="7" onclick="addNumber('7') ">
+                <input type="button" value="8" onclick="addNumber('8') ">
+                <input type="button" value="9" onclick="addNumber('9')">
+                <input type="button" value="*" onclick="display.value += '*'" class="operator">
+
+            </div>
+            <div>
+                <input type="button" value="4" onclick="addNumber('4')">
+                <input type="button" value="5" onclick="addNumber('5')">
+                <input type="button" value="6" onclick="addNumber('6')">
+                <input type="button" value="-" onclick="display.value += '-'" class="operator">
+
+            </div>
+            <div>
+                <input type="button" value="1" onclick="addNumber('1')">
+                <input type="button" value="2" onclick="addNumber('2')">
+                <input type="button" value="3" onclick="addNumber('3')">
+                <input type="button" value="+" onclick="display.value += '+'" class="operator">
+
+            </div>
+            <div>
+                <input type="button" value="00" onclick="addNumber('00')">
+                <input type="button" value="0" onclick="addNumber('0')">
+                <input type="button" value="=" onclick="calculate()" class="equal operator">
+
+            </div>
+
+
+        </form>
+
+
+        
+    </div>
+
+</div>
+
+
+<p class="credit"> CREATED BY LAVANYA S</p>
+<script>
+    let display = document.querySelector('input[name="display"]');
+    let justCalculated = false;
+    let history = document.querySelector(".history")
+
+    function addNumber(num){
+        if(justCalculated){
+            display.value = "";
+            justCalculated = false;
+
+        }
+        display.value += num;
+    }
+    function calculate(){
+
+        if(display.value == "Error"){
+            display.value = "";
+            return;
+        }
+
+        if(display.value.length > 10){
+            display.value = "Limit!";
+            return;
+        }
+        
+        try{
+            let result = eval(display.value);
+
+            history.innerHTML = 
+            display.value + " = " + result + "<br>" + history.innerHTML;
+
+            display.value = result;
+
+            justCalculated = true;
+        }
+        catch{
+            display.value = "Error";
+        }
+    }
+    document.addEventListener("keydown", function(event){
+
+        const key = event.key;
+
+         if(!isNaN(key)){
+            if(display.value === "Error" || display.value === "Limit!" || justCalculated){
+                display.value = "";
+                justCalculated = false;
+            }
+        
+         }
+
+        if("+-*/.".includes(key)){
+            let last = display.value.slice(-1);
+            if(!"+-*/.".includes(last)){
+                display.value += key;
+            }
+        }
+
+        if(key === "Enter"){
+            calculate();
+        }
+
+        if(key === "Backspace"){
+            display.value = display.value.slice(0,-1);
+        }
+    });
+</script>
+    
+</body>
+</html>
